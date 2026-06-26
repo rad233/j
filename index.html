@@ -131,11 +131,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 after:top-[-14px] after:border-[7px] after:z-[98] after:block after:h-0 after:absolute after:w-0
                 after:border-t-transparent after:border-l-transparent after:border-r-transparent">
                 <div role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <a x-show="lang === 'en'" @click.prevent="lang = 'ka'; doGTranslate('ka'); open=false" class="flex items-center gap-2 p-1 text-[#333] font-normal capitalize text-sm" href="#">
+                    <a x-show="lang === 'en'" @click.prevent="lang = 'ka'; open=false" onclick="event.preventDefault(); doGTranslate('ka');" class="flex items-center gap-2 p-1 text-[#333] font-normal capitalize text-sm" href="#">
                         <span>🇬🇪</span>
                         <span>Georgia</span>
                     </a>
-                    <a x-show="lang === 'ka'" @click.prevent="lang = 'en'; doGTranslate('en'); open=false" class="flex items-center gap-2 p-1 text-[#333] font-normal capitalize text-sm" href="#">
+                    <a x-show="lang === 'ka'" @click.prevent="lang = 'en'; open=false" onclick="event.preventDefault(); doGTranslate('en');" class="flex items-center gap-2 p-1 text-[#333] font-normal capitalize text-sm" href="#">
                         <span>🇺🇸</span>
                         <span>English</span>
                     </a>
@@ -1279,6 +1279,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     .hp-carousel-wrapper {
       /* Matches mobile aspect ratio perfectly so height scales dynamically with depth */
       aspect-ratio: 800 / 1000; 
+      min-height: 500px;
       height: auto;
     }
 
