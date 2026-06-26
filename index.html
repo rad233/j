@@ -131,11 +131,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 after:top-[-14px] after:border-[7px] after:z-[98] after:block after:h-0 after:absolute after:w-0
                 after:border-t-transparent after:border-l-transparent after:border-r-transparent">
                 <div role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <a x-show="lang === 'en'" @click.prevent="lang = 'ka'; doGTranslate('ka');" class="flex items-center gap-2 p-1 text-[#333] font-normal capitalize text-sm" href="#">
+                    <a x-show="lang === 'en'" @click.prevent="lang = 'ka'; doGTranslate('ka');" @touchstart.prevent="lang = 'ka'; doGTranslate('ka');" class="flex items-center gap-2 p-1 text-[#333] font-normal capitalize text-sm" href="#">
                         <span>🇬🇪</span>
                         <span>Georgia</span>
                     </a>
-                    <a x-show="lang === 'ka'" @click.prevent="lang = 'en'; doGTranslate('en');" class="flex items-center gap-2 p-1 text-[#333] font-normal capitalize text-sm" href="#">
+                    <a x-show="lang === 'ka'" @click.prevent="lang = 'en'; doGTranslate('en');" @touchstart.prevent="lang = 'en'; doGTranslate('en');" class="flex items-center gap-2 p-1 text-[#333] font-normal capitalize text-sm" href="#">
                         <span>🇺🇸</span>
                         <span>English</span>
                     </a>
