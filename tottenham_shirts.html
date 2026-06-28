@@ -6203,6 +6203,13 @@ function googleTranslateElementInit() {
 }
 
 function doGTranslate(lang) {
+        if (lang === 'en') {
+        // Clear the translation cookie and reload to completely stop the translator
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=' + window.location.hostname + '; path=/;';
+        window.location.reload();
+        return;
+    }
     function tryTranslate() {
         var teCombo = document.querySelector('select.goog-te-combo');
         if (!teCombo || teCombo.length === 0) {
