@@ -7560,19 +7560,36 @@ function doGTranslate(lang) {
 
 <script>
   (function() {
-    // 1. Force the Google Translate cookie to Georgian immediately
-    var cookieDomain = window.location.hostname.toLowerString().indexOf('www.') === 0 ? 
-                       window.location.hostname.substring(4) : window.location.hostname;
-    
-    document.cookie = "googtrans=/auto/ka; path=/; domain=" + cookieDomain + ";";
+    // 1. Force the cookie just in case
     document.cookie = "googtrans=/auto/ka; path=/;";
 
-    // 2. Double check if we need to force a reload on the back button
+    function runTranslation() {
+      if (typeof doGTranslate === 'function') {
+        doGTranslate('ka');
+      }
+    }
+
+    // 2. Watch the page structure for Google Translate initializing
+    var observer = new MutationObserver(function(mutations) {
+      runTranslation();
+    });
+
+    // Start watching the entire document layout
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      childList: true, 
+      subtree: true 
+    });
+
+    // 3. Keep our forced reloads for history navigation as a backup
     window.addEventListener('pageshow', function(event) {
       if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
         window.location.reload();
       }
     });
+
+    // Run it immediately on load too
+    runTranslation();
   })();
 </script>
 
