@@ -7560,29 +7560,35 @@ function doGTranslate(lang) {
 
 <script>
   (function() {
-    // 1. Check if we already forced a clean navigation state
-    var isRefreshed = sessionStorage.getItem('pageRefreshedForTranslation');
-
-    // 2. Force the correct English -> Georgian cookie
+    // 1. Force the correct English -> Georgian cookie immediately
     document.cookie = "googtrans=/en/ka; path=/;";
     document.cookie = "googtrans=/en/ka; path=/; domain=" + window.location.hostname + ";";
 
-    // 3. If the user hit the refresh button, performance navigation type will be 1
-    var isHardRefresh = window.performance && window.performance.navigation.type === 1;
-    // If they used the back/forward button, navigation type will be 2
-    var isBackNav = window.performance && window.performance.navigation.type === 2;
+    // 2. Detect if the page is being loaded from the browser cache via the Back Button
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+        // If they arrived via back button, force a clean reload with a new timestamp
+        window.location.href = window.location.origin + window.location.pathname + '?tr=' + new Date().getTime();
+      }
+    });
 
-    if ((isHardRefresh || isBackNav) && !isRefreshed) {
-      // Set a flag so we don't get stuck in an infinite reload loop
+    // 3. Handle normal hard refreshes (Type 1)
+    var isHardRefresh = window.performance && window.performance.navigation.type === 1;
+    var isRefreshed = sessionStorage.getItem('pageRefreshedForTranslation');
+
+    if (isHardRefresh && !isRefreshed) {
       sessionStorage.setItem('pageRefreshedForTranslation', 'true');
-      
-      // Force a completely clean break from the cache by appending a random timestamp
       window.location.href = window.location.origin + window.location.pathname + '?tr=' + new Date().getTime();
     } else {
-      // Once it loads successfully with our URL trick, clear the flag for next time
       sessionStorage.removeItem('pageRefreshedForTranslation');
       
-      // Keep hammering the function just in case
+      // Clean up the URL bar instantly so the user sees a clean domain
+      if (window.location.search.indexOf('tr=') !== -1) {
+        var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+      }
+      
+      // 4. Hammer the translation engine to force it into Georgian
       var count = 0;
       var interval = setInterval(function() {
         if (typeof doGTranslate === 'function') {
