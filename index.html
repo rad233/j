@@ -7562,14 +7562,27 @@ function doGTranslate(lang) {
 <input type="hidden" id="page-cache-check" value="0">
 
 <script>
+  function triggerGeorgianTranslation() {
+    // Wait 300 milliseconds to make sure the Google Translate script is fully ready
+    setTimeout(function() {
+      if (typeof doGTranslate === 'function') {
+        doGTranslate('ka');
+      }
+    }, 300);
+  }
+
+  // 1. Handle the normal page refresh / initial load issue
+  document.addEventListener('DOMContentLoaded', function() {
+    triggerGeorgianTranslation();
+  });
+
+  // 2. Handle the back button issue using your hidden input trick
   (function() {
     var checkInput = document.getElementById('page-cache-check');
     if (checkInput) {
-      // If the value is '1', it means the browser pulled this from cache history
       if (checkInput.value === '1') {
         window.location.reload();
       } else {
-        // Mark it as loaded so it's '1' if we come back to it
         checkInput.value = '1';
       }
     }
