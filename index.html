@@ -7558,42 +7558,21 @@ function doGTranslate(lang) {
 })();
 </script>
 
-<!-- A hidden input field that tracks if the page was previously loaded -->
-<input type="hidden" id="page-cache-check" value="0">
-
 <script>
-  function forceGeorgian() {
-    // Check every 50ms if the translation function is ready
-    var checkExist = setInterval(function() {
-      if (typeof doGTranslate === 'function') {
-        doGTranslate('ka');
-        clearInterval(checkExist); // Stop checking once it's done
-      }
-    }, 50);
-
-    // Safety net: stop checking after 4 seconds so it doesn't loop forever
-    setTimeout(function() {
-      clearInterval(checkExist);
-    }, 4000);
-  }
-
-  // 1. Run it on normal load / hard reload
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', forceGeorgian);
-  } else {
-    forceGeorgian();
-  }
-
-  // 2. Run it on back-button cache restore
   (function() {
-    var checkInput = document.getElementById('page-cache-check');
-    if (checkInput) {
-      if (checkInput.value === '1') {
+    // 1. Force the Google Translate cookie to Georgian immediately
+    var cookieDomain = window.location.hostname.toLowerString().indexOf('www.') === 0 ? 
+                       window.location.hostname.substring(4) : window.location.hostname;
+    
+    document.cookie = "googtrans=/auto/ka; path=/; domain=" + cookieDomain + ";";
+    document.cookie = "googtrans=/auto/ka; path=/;";
+
+    // 2. Double check if we need to force a reload on the back button
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
         window.location.reload();
-      } else {
-        checkInput.value = '1';
       }
-    }
+    });
   })();
 </script>
 
