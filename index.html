@@ -7558,15 +7558,22 @@ function doGTranslate(lang) {
 })();
 </script>
 
+<!-- A hidden input field that tracks if the page was previously loaded -->
+<input type="hidden" id="page-cache-check" value="0">
+
 <script>
-    window.addEventListener('pageshow', function(event) {
-        var historyTraversal = event.persisted ||
-                            (typeof window.performance != 'undefined' &&
-                            window.performance.navigation.type === 2);
-        if (historyTraversal) {
-            window.location.reload();
-        }
-    });
-    </script>
+  (function() {
+    var checkInput = document.getElementById('page-cache-check');
+    if (checkInput) {
+      // If the value is '1', it means the browser pulled this from cache history
+      if (checkInput.value === '1') {
+        window.location.reload();
+      } else {
+        // Mark it as loaded so it's '1' if we come back to it
+        checkInput.value = '1';
+      }
+    }
+  })();
+</script>
 
 </body></html>
